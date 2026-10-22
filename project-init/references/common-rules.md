@@ -1,6 +1,6 @@
 # Consolidated engineering rules
 
-Union of market-clean (MC), nn-chrome-extension (NN), tomapan (TP). Strictest wins where they differ.
+Union of market-clean (MC), nn-chrome-extension (NN), tomapan (TP), make it accessible (MIA). Strictest wins where they differ.
 
 ## File & module structure
 
@@ -29,6 +29,9 @@ Union of market-clean (MC), nn-chrome-extension (NN), tomapan (TP). Strictest wi
 - Strict mode + `noUncheckedIndexedAccess` + `exactOptionalPropertyTypes` (TP).
 - No `any` without an escape-hatch comment explaining why (TP `// @agent-allowed: any because …`).
 - **`unknown`-first parsing** of external/stored payloads; almost no casts (NN).
+- **Types are defined, never asserted**: no `as` (except `as const`), no non-null `!`, no `any`; ESLint `consistent-type-assertions: never` + `strictTypeChecked` (MIA).
+- **zod at every boundary** (files, network, model output, CLI events); types inferred from the schema, never written twice. Size limits go after parsing, not in the schema (MIA).
+- Node-run TypeScript: **erasable syntax only** (no `enum`, parameter properties, namespaces); `verbatimModuleSyntax`, `allowImportingTsExtensions`, `noEmit` (MIA).
 - Typed domain errors; never throw plain strings; pure modules return results instead of throwing (TP).
 - No dead code on main: delete, never comment out; no `console.log` in committed code (TP). Remove only orphans *your* change created; mention pre-existing dead code instead of deleting unasked (Karpathy).
 - Don't add another flavor of an existing helper — reuse the right one (NN). Don't imitate existing bad patterns (NN).
@@ -45,6 +48,15 @@ Union of market-clean (MC), nn-chrome-extension (NN), tomapan (TP). Strictest wi
 - Never answer a user-visible defect with "the tests pass" — if the suite is green and the user sees a bug, the test's reference frame is wrong: fix the test first (NN).
 - "A build is not your source": rebuild before re-testing after reverts — stale bundles lie (NN).
 - Data-layer modules take injected clients/collections so they unit-test without the real DB (MC).
+- A green check on an empty project proves nothing: say what it covered (0 packages, 0 tests) (2026-10-22).
+- A negative lint/type test asserts the rule ID that fired, not only a non-zero exit (2026-10-22).
+
+## Tooling
+
+- **One `check` command** = typecheck + lint + format check + tests; it is the definition of done (MIA).
+- Exact-pinned dev dependencies installed at init time, never hard-coded versions in a template (MIA).
+- "Latest" is not one version set: pin each tool to a combination whose peer ranges agree (TS 7 vs typescript-eslint `<6.1`, 2026-10-22); `pnpm peers check` clean.
+- A reference project's process generalizes; its toolchain only to projects on the same runtime (Node-native TS does not run in a browser) (2026-10-22).
 
 ## Workflow & session
 
@@ -54,6 +66,9 @@ Union of market-clean (MC), nn-chrome-extension (NN), tomapan (TP). Strictest wi
 - **DoD**: typecheck + lint + tests green before declaring done; list every file touched (NN, TP). Mechanize the gate in a review script: syntax check, run tests, line-budget check, invariant greps (MC `review-after-feature.sh`).
 - Ask, don't assume: stop on ambiguity that changes the result; present interpretations instead of silently picking (TP, Karpathy).
 - Convert tasks into verifiable goals with per-step checks (Karpathy).
+- **Plans get two judges** (`critic-engineering`, `critic-design`) before execution; Andrei sees adopted/rejected findings and gives the go. The rule lives in `~/.claude/CLAUDE.md` (MIA, all projects since 2026-10-22).
+- **Measure the whole set before planning a fix**: tally a finding class across every document/page/user first; one sample is not a rate (MIA).
+- Judges get the user's request verbatim and a fresh context; a judge that only sees the plan cannot catch a misread intent (2026-10-22).
 - Zero live-user impact as a standing default once shipped: behavior-preserving on hot paths or fully dormant; additive over modifying (MC memory).
 
 ## Docs
