@@ -1,0 +1,6 @@
+synced/
+.trash/
+seo/
+seo-*/
+.venv/
+.DS_Store
