@@ -217,3 +217,170 @@ Union of market-clean (MC), nn-chrome-extension (NN), tomapan (TP), make it acce
 - 2026-10-27 — A store text limit is checked by counting the exact proposed string (`wc -c`), never by eye. Case: a 134-character Chrome summary against a 132 limit.
 - 2026-10-27 — Splitting a CI job into a matrix: check what the old single command built implicitly, and give every uploaded artifact a per-leg name. Case: `e2e:<browser>` skipped the extension build; upload-artifact v4 rejects duplicate names.
 - 2026-10-27 — A test-driver workaround for a hang names the user-visible effect it rules out and asserts it (the next key lands). Case: leaving a lost keyup pending once the overlay closed.
+- 2026-10-27 — An identifier sent before consent is data collection: phone home only when a feature the user chose needs it. Case: install registration on first run vs "stays on this device".
+- 2026-10-27 — A consent default is checked against the legal basis the privacy page already states. Case: Chrome analytics opt-out vs "only with your consent".
+- 2026-10-27 — Placing serverless functions in an existing hosting project starts by checking its root directory, deploy method and routing flags (`trailingSlash`, `cleanUrls` redirect API paths and break preflights and webhooks). Case: the WriteOnce API in the static site's Vercel project.
+- 2026-10-27 — A Firefox extension's origin cannot be allowlisted (random `moz-extension` UUID per install): use `host_permissions` for the API origin, keep CORS as defence, the token as auth.
+
+## From WriteOnce critics (WO, promoted 2026-10-31)
+
+- A harness ported from another project is checked for what it rewrites and for what it never used. A live safety guard aimed at one conversation checks the exact URL and the page's own conversation id right before the risky key (WO).
+- Write rules are decided on the trusted side from storage, never from the request (create vs update by a client id); a client preview of "will this work" calls the same pure function (WO).
+- Before scoping a fix to one input shape, check which shapes production sends. Before a plan cites "the existing X" or today's behaviour, grep and read it; restoring a removed flow reads the removal commit's whole diff (WO).
+- A mechanism with a "Do not remove" guard is changed only after citing and spiking it; deleting a spec first moves its guard cases to a surviving test. Trace where each event happens before planning "one line per call site" (WO).
+- Once-only flags need a reset path when their state can be undone; cleanup after a committed write never turns the reply into a failure; a renderer fed live input never throws on partial values (`Intl` RangeError) (WO).
+- Parsers tokenise only the known grammar; an importer checks the file shape once and parses each entry alone; an export escape is undone on import and round-trip tested on real values (WO).
+- An edit rebuilt from a form draft merges onto the stored record; a rename separates product identifiers from external names tests match; a workspace rename is verified with `--frozen-lockfile` (WO).
+- CAS data layers are tested against the real database; an idempotency record carries the change id on the row; a losing create-once CAS compares the stored value with its own; a crash-resume record redoes every later step and needs nothing they destroy (WO).
+- Enumeration-safe endpoints apply every limit to known and unknown inputs before the lookup. A share of a shared provider quota is sized from every send path of every consumer. MongoDB remove-and-add on one array is one positional `$set` (WO).
+- A name served by a DNS wildcard loses it once it has any record of its own: add the explicit A/ALIAS in the same change (WO outage, ~35 min).
+- CI: a pipe sets pipefail and checks output size; a CLI a step relies on must still ship with the pinned runtime (corepack left Node 25); an e2e needing a service gets it in the workflow, never "skip when unset"; e2e against rate-limited endpoints counts every shared cap and seeds the rest (WO).
+- Vercel functions: set `maxDuration` below any lease, count returned rows against the 4.5 MB response cap, count functions against the plan cap (Hobby 12), check the builder reads a config key; generated `.js` folders need an ESLint ignore (flat config ignores `.gitignore`) (WO).
+- A dispatcher keyed by a URL segment looks names up with `Map`/`hasOwn` (no `/api/constructor/`) and is tested against the routes directory (WO).
+- Stripe: count a lapse from `ended_at`, never `current_period_end`; events 409'd before their parent doc arrive later, so never write transitional states that remove access; test vs live URLs live in the deploy env behind a server redirect; an allowlist turning paid lists every gate it protects (WO).
+- E2E: an entry page's URL, loading state, heading or selector attribute change greps every harness that waits on it; Playwright Chromium emulates focus (turn it off and assert `hasFocus()===false`); before removing a wait, list every key up to the next assertion; cutting tests never cuts a cited covering test (WO).
+- Focus that targets a row created by a write waits for the render and handles filters that hide it. A theme or token mechanism is removed in the same phase its replacement ships (WO).
+- An optional email in an anonymous collection makes it personal data. A drill names what it must prove (the backup artifact, not a fresh dump). Before any `git add -A`, check untracked files for secrets; a page script reused by a second page is checked for hard-coded navigation (WO).
+- Extensions: in Firefox content scripts build events with the page's constructors (`cloneInto`); a late capture listener on `window` runs after the page's own; content-script focus listeners gate on `isTrusted`; a handler returning false gives no error code; ack before a delivery the requester won't outlive (WO).
+- Extensions: per-site rules for cross-origin frames come from `sender.tab.url` (Firefox has no `ancestorOrigins`); probe which APIs a framed page has; state from `onStartup`/`onInstalled` is also checked at top level; `alarms.create` resets the period, so get first; Firefox `permissions.request` needs the gesture synchronously (WO).
+- Extensions: "before paint" on an MV3 page needs a synchronous classic script from `public/`; assets reach the package only from Vite's `publicDir`; components hosted on non-extension pages get strings passed in (WO).
+
+## Product & copy (from WriteOnce design critics, promoted 2026-10-31)
+
+- Copy states a limit, feature or supported site only once the code and the live-test record back it; every string promising a missing feature is found and dropped, not one row (WO).
+- A limit is tested at the cap, above it on edit and with an unknown id; "delete one" copy at cap + 1 and above; a quota that counts one of two ways to finish makes the other a bypass (WO).
+- A state inferred from a failure, and a shared error code's copy, are true for every cause; every contract error maps to a UI state with a way out; a bridging state is walked from every way in (WO).
+- Founder questions say when they depart from an approved mockup, check the recommended option against recorded decisions, come after diagnosis, and never re-ask a decision already in the docs (WO).
+- A button that sends the user elsewhere is labelled with its destination; a setting that gates a feature with the feature's name; per-browser steps with each browser's own UI words (WO).
+- Permission flows: spec every grant shape, check a popup survives the prompt, put the grant before the success line it makes true, re-check on the next click, spec it on every surface that accepts the opt-in (WO).
+- A deletion or anonymity promise is checked against every store keyed by the value (rate-limit counters, IP keys, backups, provider logs); "fix the privacy page" audits every paragraph (WO).
+- Timing copy matches the real schedule and how the platform loads config; a page-level notice says when it clears; "use defaults when invalid" fabricates a default once shown; missing and corrupt are separate states (WO).
+- Purchase entries show the price before asking for anything; redirects into a third-party flow end their errors on a readable page; "Ends" and "Renews" are separate states; Pro data stays removable after a downgrade (WO).
+- A whole-replace restore names what it removes and never overwrites what the user cannot see; a snapshot label says which moment it holds (WO).
+- A static site with no build step has no partials: measure shared chrome against the largest page before choosing its markup; re-scope a shared stylesheet's element rules before adding chrome (WO site, 2026-11-02).
+- Decorative motion over 5 s needs a pause (WCAG 2.2.2); reduced motion removes every effect tied to it (masks, the pause control); "no sideways scroll" inside `overflow:hidden` proves nothing, assert each child is in the viewport (WO site).
+- A model site with one theme is copied into every theme you ship; site mocks of a product mid-redesign stay schematic and few (WO site).
+- A summary of a detailed matrix (strip, badge) is checked against it and links to the detail it hides; third-party logos need the owner's licence, names in text state compatibility (WO site: Microsoft, LinkedIn, Meta rules).
+- Fonts are self-hosted (Google-hosted fonts: LG München I, 3 O 17493/20); curl the host's live cache-control before adding a late-discovered subresource, and version a file given an immutable cache (WO site).
+- (2026-11-02) Turning a status table into tiles or tags: map every old claim to its new place before building and carry each caveat as written, per browser and per context; merged notes lose qualifiers (who causes a behaviour, which browser).
+- (2026-11-02) On a public site, a path inside the product is prefixed with the product name when a step shares its name with the site's nav ("In WriteOnce: Pricing", not "Pricing ›").
+- (2026-11-02) A "not yet promised" list never borrows the confirmed state's visuals (✓, the same pill style).
+- (2026-11-02) A line cap on HTML/CSS is enforced by nothing when ESLint covers only ts/tsx: state a line budget before growing a page near the cap and check it with `wc -l`.
+- (2026-11-04) Before planning "one line at each call site", trace where each event happens; a result handled in a content script or frame never reaches the background. Case: slice 8 insert and family counts. Case 2026-11-04: the palette renders inside its own frame and never reaches the background `render()` named as the choke point for "every route".
+- (2026-10-29) Before removing a wait, list every key between it and the next assertion; a plan that cuts tests never cuts a cited covering test and counts after earlier cuts. Case: `HISTORY_SETTLE_MS`; trigger:139 citing overlay:94.
+- (2026-11-04) Before a plan says "the existing X" or cites today's behaviour, grep and read it; restoring a removed flow reads the removal commit's whole diff. Case: no `storage.onChanged`; the Conflicts filter; 474279e. A builder reused for made-up data is checked for its input type and the data claim against the data (`buildExport(Template[])`; "a Support template without fields" when all have fields).
+- (2026-11-01) A global rule on an element selector (`button`, `select`) is checked against every element of that type and every older rule for it, and a page-level override matches or beats the shared rule's specificity. Case: nowrap on picker rows and `button.link`; the overlay's `.field select`; `:root` vs `:root[data-theme='dark']` color-scheme.
+- (2026-10-28) A promise for a missing feature is searched in every string: a rule "until X exists" ends when X ships, a SPEC surface shipped early is audited, and a dropped Undo or deferred feature leaves no claim behind. Case: shortcut required until the palette; "Not synced yet"; "Use this version"; "recoverable with the old key".
+- (2026-10-30) A plan premise about existing behaviour is checked against the e2e tests, and a design from an older snapshot against rules that loosened since. Case: toggles get a chip; a blank `;hello` passing.
+- (2026-10-28) One action reached for two reasons gets copy true at each entry point. Case: rotate vs lost recovery key.
+- (2026-10-31) Public claims (Pro features, supported sites) are re-checked against shipped features and the live-test record, not the older listing. Case: "folders" on the landing page; LinkedIn in the CWS listing.
+- (2026-10-30) Onboarding copy names only what the onboarding creates, and copy after uninstall only actions possible without the extension. Case: ";hello"; "until you delete them".
+- (2026-10-30) A page copying another project's model checks which styles and components the target site has. Case: side-by-side forms on a 720px site.
+- (2026-11-04) Copy explaining an unbuilt feature uses the conditional in every line (title, steps, privacy claim) and says answers "help decide", never "decide"; a "considering" tag does not soften a present-tense title.
+- (2026-11-04) Any listing or marketing line that repeats a product limit carries the same limit the UI shows (count and window). Case: "last 10 versions" in the CWS text, while the UI says "up to 10 versions … from the last 30 days".
+- (2026-11-04) Store images and tiles get a `file` check for RGBA before every commit, no matter what an earlier commit message claims. Case: a commit said "no alpha", yet three of its files were RGBA.
+- (2026-11-04) Before a public browser-store listing, review every platform the manifest declares, not only desktop. Case: `gecko_android`, added just to silence a lint warning, would have offered an untested Firefox for Android build.
+- (2026-11-06) Reusing a component "as is" in a new context brings all its copy: list every string it can render (buttons, busy text, errors, sub-screens, the email it triggers) against the new context's banned words. Case: LinkFlow's "Link this browser" inside "Get Pro without linking".
+- (2026-11-06) An action chained from a child's success callback never decides from props captured before the write; wait for the store change in an effect or decide from fresh state, above all when a wrong guess charges money. Case: auto-checkout for an already-Pro email, no server guard.
+- (2026-11-06) When a flow's container unmounts on success, the plan names where focus lands and which status explains the new state. Case: the inline email/code flow vanishing when `linked` flips.
+- (2026-11-06) Changing copy an e2e helper waits on means grepping the helpers too, not only the specs that name the flow. Case: `waitUnlinked` matching `billingLinkFirst` in ~18 call sites.
+- (2026-11-06) A new permission changes what every state built on the old blind spot now sees: re-check each "no access here" branch and its copy, and classify pages that can never run scripts by an injection attempt, not by URL scheme or `permissions.contains`. Case: host permissions exposing tab.url moved the Chrome Web Store tab from "unknown" to "Reload this page".
+- (2026-11-06) A lifecycle fix lists every way an extension restarts (install, update, re-enable, settings-triggered reloads, browser restart), not only the one reported. Case: `onInstalled` misses re-enable after a disable; a `storage.session` flag on worker start covers all.
+- (2026-11-06) An orphaned-context test keeps the caret in the field across the update; any later focus makes the old script inert on its own, so "no error" passes without the fix.
+- (2026-11-06) Adding a permission updates the architecture doc's "not requested" list, the manifest test's exact permission list and the store's per-permission justification fields in the same change.
+
+## Moved from work-project critics (2026-11-06) — cross-project
+- 2026-11-03: In strict structured output, declare a diagnostic field after the payload; properties are generated in schema order, so an earlier field steers the decision (`unsupportedReason` after `setup`).
+- 2026-11-03: A reason enum must cover every refusal branch of the prompt and include `OTHER`, or the model forces the nearest wrong label (documented-but-unsupported auth vs undocumented auth).
+- 2026-11-04: Test new classification logic through the outermost real mock (openai), not by mocking the function that contains it.
+- 2026-11-04: Never map indexes from a `toLowerCase()` copy back to the original (`'İ'` changes length); use a case-insensitive RegExp with `lastIndex` on the original.
+- 2026-11-04: A ReDoS fix must also time the per-match work (a line scan per link), not only the regexes; measure every stage with adversarial input.
+- 2026-11-06: A repair loop that re-prompts with the execution error's diagnostic gives attempt 2 no knowledge of why attempt 1's repair was rejected; feed the rejection reason into the next diagnostic.
+- 2026-11-06: "Stop on an empty page" is per-API; measure the over-range response per platform (Woo `[]`, Magento `items: []`, Pimcore 0 edges) before setting a request-count bar, and prefer a short-page stop.
+- (2026-11-06) When a list drops its source's description line, each bare name must still be true on its own. Case: "Outlook" without "on the web" claims the desktop app.
+- (2026-11-06) A "where it works" answer names the most likely place it doesn't work, next to the list. Case: Google Docs left only on Help.
+- (2026-11-06) A test keeping two copied lists in sync compares them both ways, read only from the source's own container, never by substring. Case: `'X'` matches any capital X in Help.
+- (2026-11-06) A navigation guard on `popstate` reverts by stack position (an index in `history.state`, `history.go(±delta)`, echo ignored), never by pushing the old address; typed or anchor hashes (state null) fall back to `replaceState`. Case: ghost Pricing entries from a pushState revert.
+- (2026-11-06) When a history entry shows a different view than its hash, the address is rewritten with `replaceState`, or a reload and the Back menu contradict the screen. Case: `#welcome` mapped to the library after Skip setup.
+- (2026-11-06) "As it does today" in a plan is checked in code (and scroll/focus after Back measured) before it becomes the spec. Case: "starts at the top as on a click" with no scrollTo anywhere; the browser restores 2000 px after Back.
+- 2026-11-03: Keep a log out of a `try` that maps every error to one code, so a logging failure cannot surface as that code (`invokeModel.ts`).
+- 2026-11-04: A limit test that asserts only text shared by every budget error passes for the wrong limit; assert the class or the specific reason.
+- 2026-11-04: When a refusal is correctable only under a job condition, throw the reason from the model wrapper and decide in the caller that owns the job.
+- 2026-11-05: A measurement that says "read X if reachable" must confirm the read path before the deploy; usage stored only in a deployed DB needs a log line.
+- 2026-11-05: A model-setting comparison where the inputs also differ is not evidence; call the quality effect unknown and decide on cost and budget.
+- 2026-11-05: Detect "our deadline fired" with `signal.aborted` where the signal lives, not by error name higher up; the same abort surfaces as TimeoutError, APIUserAbortError or AbortError, and converting it higher up loses state such as usage.
+- 2026-11-06: `jest … | grep` hides the exit code; capture the output and fail on "failed" before a commit step runs.
+- 2026-11-03: Adding an output field to a structured-output schema changes model behavior; never call such a change "diagnostic only, no behavior change".
+- 2026-11-03: A defensive guard is "strong" only if the guarded state can occur; check the real trigger path first (workspace switch reloads the page).
+- 2026-11-04: A self-repair fix is proven only by runs where the repair actually ran, counted over ≥3 runs against a baseline.
+- 2026-11-05: Write the A/B success threshold before running; a refusal that only changes reason is no progress.
+- 2026-11-05: At n=8 set the pass bar against the baseline, not another arm's point estimate (fails ~1/3 of the time on noise).
+- 2026-11-05: Before fixing an intermittent fault inferred from timing gaps, add the log that shows it directly (elapsed time per model call).
+- 2026-11-05: A failure counter kept in state must reset on every path that clears the error it guards (Retry, reopen), or the next attempt starts used up.
+- 2026-11-09: Set a loop's deadline where its abort signal is created, not after an earlier await (`processJob` set it after `fetchDocumentation`).
+- 2026-11-09: Raising a retry count exposes later attempts to every budget created once per run; a later "budget spent" probe must not overwrite earlier evidence.
+- 2026-11-09: Before replacing a fallback error code, read the test and commit that introduced it; "refused repair → integrationSetupIncomplete" routed users to Instance details on purpose.
+- 2026-11-09: A pass-bar input carries only what the user-facing copy asks the user to type; extra hints (parameter names) measure a path no user takes.
+- 2026-11-09: When an error asks the user to type a value, check where they can see the valid values; if only the log has them, show them (Akeneo locale/channel codes).
+- 2026-11-09: A sentence added to a shared prompt block changes that stage for every source; count it against every row measured at that stage.
+- 2026-11-10: An out-of-repo prerequisite checklist for a new queue/service must cover the producer's permissions (e.g. SendMessage) as well as the consumer's config, and becomes a release condition written in the MR.
+
+## From MarketClean, 2026-11-13 (critic-engineering)
+- A DOM marker measured inside element X proves nothing for a function that receives an ancestor of X; scope the code to what was measured, or re-measure on the real argument.
+- Widening a matcher shared by two predicates with different intents changes both; check each predicate's own exclusions first.
+
+## From MarketClean, 2026-11-13 (repeat-trials report, both judges)
+- A cron add-on that only sends on success turns a broken query into a silent week; its failure goes in the email it would have sent, not only the run record.
+- Before reading a ledger as "what happened", list every path that deletes from it (a rolled-back claim records grants, not attempts).
+- A "status" report on a fix shows whether the fix works (blocked attempts), not only that the problem exists.
+
+## From lamp, 2026-11-13 (plan judges)
+- macOS launchd agents can't read `~/Desktop`, `~/Documents`, `~/Downloads` (TCC); a manual Terminal run passes, so check the job's own log. Keep scheduled projects outside those folders.
+- A look-ahead window must clamp at the end of its range; test the last slot.
+- Messages queued in advance must not depend on state later runs can change; decide at send time.
+
+## From MarketClean, 2026-11-13 (denied-installs fix, both judges)
+- An event keyed per (doc, install) but storing only the install is looked up by its exact `_id`; a query on the install id mixes in other docs' events and can hide a real alert.
+- Read what a timestamp field is set to before using it as "when it happened" (a link's issue time is not its click).
+- A replay of a "last 24h" query at a past time must cap the window's end too, or every past day sees today's data.
+
+## 2026-11-14 — offer widened to live trials (MarketClean Black Friday)
+- Opening an offer to a new group means rereading every string that group sees ("Pro adds…" shown to people already on a Pro trial).
+- A campaign started early to catch a group counts who fell just before the start, and decides on purpose whether they get a message.
+- Widening an offer to live trials: check every "already paid?" test the trial emails use; email-only matching misses a restored browser that paid under another address.
+- A server text or health detail that describes who gets a feature changes in the same commit as the gate.
+
+## 2026-11-14 — page overlap fix + outreach/flip prep (MarketClean)
+- A layout measurement renders the real i18n strings with real substitutions, never placeholder text.
+- A positioning fix states its clearance as a formula (obstacle bottom + element height + offset) and tests real inner-viewport heights, not screen sizes.
+- To find who got an email without an offer, filter on its sent-at field against the flip time and the cron's real schedule, not the deadline date.
+- A script that builds a link with an env-driven parameter asserts the parameter is in the output; locally the env is unset.
+- A decision built on replies to a small outreach sets its default from data already held; replies overturn it by content, not count.
+- A feedback tally also flags the replies that need an answer; a bug report from a former user is support, not a data point.
+- A rule that overrides max-width keeps the original cap via min(origCap, newLimit); bounds for a content-box element include its padding.
+- A nowrap box under a max-width clamps the box, not the text: assert scrollWidth <= clientWidth, not only the rect.
+- An overlay audit lists every fixed-position element the stylesheet defines and every caller of the shared notice factory, not the ones in the bug report.
+- A "fails before the fix" test claim names the exact size and locale the measurement showed failing.
+
+## 2026-11-14 — daily alerts → weekly report + urgent-only (MarketClean)
+- Whether an alert interrupts the owner depends on what it puts at risk, not on its severity label.
+- Mark an alert delivered only after the send succeeds; otherwise the "email is failing" alert can never get through.
+- A weekly digest that replaces daily alerts lists what was flagged and cleared during the week.
+- An alert keyed on "new since the last run" traces how a failing group renames its checks.
+- A field added to a run record is missing from every older record; the plan says what the first run does.
+
+## 2026-11-14 — Fable ops agent (MarketClean)
+- When a report becomes the only signal, its silence is detected by something other than the reader; a dead-man records the end of the job, not its first read.
+- An agent's standing context has an expiry date per item and an owner who updates it; assistant-owned upkeep goes in the weekly digest, never an email.
+- Before automating a judgment someone liked, check every fact behind it is in the data the automation reads; porting a scratchpad census re-derives hard-coded constants from stored fields.
+- Before exposing check output to a new reader, grep every detail for raw identifiers.
+- A job scheduled after a Vercel Hobby cron leaves the one-hour late-start window.
+- A reminder needs a "done" signal from the data; walk new alert rules day by day against the real calendar before shipping.
+- A daily cap guarding a send fails closed (reserve before, release on failure), never a counter that returns null on a DB error.
+
+## 2026-11-15 — store listings price disclosure (MarketClean)
+- A price block needs a Free/Pro mark on every feature heading below it; one block doesn't relabel the sections.
+- A privacy line written before a product took emails is re-checked whenever the copy starts inviting sign-ups.
+- A per-store copy fix starts by grepping every claim on the topic in each store; a new disclosure deletes the older sentence making the same claim.
+- Store copy lists features from the public list (landing FAQ), not rebuilt from the code gates.
+- "Draft" means something different in each store: read every dashboard's status before editing.
